@@ -2,32 +2,36 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 
+public class ConexaoBancoDados {
 
+    private static final String URL = "jdbc:mysql://localhost:3306/leilao";
+    private static final String USUARIO = "root";
+    private static final String SENHA = "";
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author Adm
- */
-public class conectaDAO {
-    
-    public Connection connectDB(){
-        Connection conn = null;
-        
+    public static Connection obterConexao() {
+        Connection conexao = null;
         try {
-        
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/uc11?user=root&password=");
-            
-        } catch (SQLException erro){
-            JOptionPane.showMessageDialog(null, "Erro ConectaDAO" + erro.getMessage());
+            // Carregar o driver JDBC para o MariaDB/MySQL
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Estabelecer a conexão com o banco de dados
+            conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
+            System.out.println("Conexão bem-sucedida!");
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
         }
-        return conn;
+        return conexao;
     }
-    
+
+    public static void fecharConexao(Connection conexao) {
+        if (conexao != null) {
+            try {
+                conexao.close();
+                System.out.println("Conexão fechada!");
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar conexão: " + e.getMessage());
+            }
+        }
+    }
 }
