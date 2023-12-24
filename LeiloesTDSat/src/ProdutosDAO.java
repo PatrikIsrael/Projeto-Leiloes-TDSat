@@ -21,18 +21,16 @@ public class ProdutosDAO {
         } catch (SQLException e) {
             e.printStackTrace(); // Imprime o erro para identificação
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto: " + e.getMessage());
-        } finally {
-            ConexaoBancoDados.fecharConexao(conexao); // Fechar conexão
         }
     }
 
-      public ArrayList<ProdutosDTO> listarProdutos() {
+    public ArrayList<ProdutosDTO> listarProdutos() {
         ArrayList<ProdutosDTO> listaProdutos = new ArrayList<>();
         String query = "SELECT * FROM produtos";
-        Connection conexao = ConexaoBancoDados.obterConexao(); // Obter conexão
+        Connection conexao = ConexaoBancoDados.obterConexao();
 
         try (PreparedStatement prepStatement = conexao.prepareStatement(query);
-             var resultSet = prepStatement.executeQuery()) {
+            var resultSet = prepStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 ProdutosDTO produto = new ProdutosDTO();
@@ -43,10 +41,10 @@ public class ProdutosDAO {
                 listaProdutos.add(produto);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Imprime o erro para identificação
-            // Lide com o erro apropriado aqui, se necessário
+            e.printStackTrace();
+            System.err.println("Erro ao listar produtos: " + e.getMessage());
         } finally {
-            ConexaoBancoDados.fecharConexao(conexao); // Fechar conexão
+            ConexaoBancoDados.fecharConexao(conexao);
         }
 
         return listaProdutos;
