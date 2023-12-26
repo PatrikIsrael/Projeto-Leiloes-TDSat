@@ -1,3 +1,4 @@
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class ProdutosDAO {
 
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
         } catch (SQLException e) {
-            e.printStackTrace(); // Imprime o erro para identificação
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto: " + e.getMessage());
         }
     }
@@ -29,8 +30,7 @@ public class ProdutosDAO {
         String query = "SELECT * FROM produtos";
         Connection conexao = ConexaoBancoDados.obterConexao();
 
-        try (PreparedStatement prepStatement = conexao.prepareStatement(query);
-            var resultSet = prepStatement.executeQuery()) {
+        try (PreparedStatement prepStatement = conexao.prepareStatement(query); var resultSet = prepStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 ProdutosDTO produto = new ProdutosDTO();
@@ -49,4 +49,29 @@ public class ProdutosDAO {
 
         return listaProdutos;
     }
+
+    public boolean venderProduto(int idProduto) {
+        String query = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+        Connection conexao = ConexaoBancoDados.obterConexao();
+
+        try (PreparedStatement prepStatement = conexao.prepareStatement(query)) {
+            prepStatement.setInt(1, idProduto);
+            int linhasAfetadas = prepStatement.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado ou não pôde ser vendido.");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao vender produto: " + e.getMessage());
+            return false;
+        } finally {
+            ConexaoBancoDados.fecharConexao(conexao);
+        }
+    }
+
 }

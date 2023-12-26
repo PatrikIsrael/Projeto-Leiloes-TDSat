@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -133,11 +134,22 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
-        
+    
+    if (!id.isEmpty()) { 
+        int idProduto = Integer.parseInt(id);
         ProdutosDAO produtosdao = new ProdutosDAO();
         
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+        boolean vendaBemSucedida = produtosdao.venderProduto(idProduto);
+        
+        if (vendaBemSucedida) {
+           JOptionPane.showMessageDialog(null, "Venda Realizada com sucesso!!");
+            listarProdutos();
+        } else {
+            JOptionPane.showMessageDialog(null, "Falha ao vender o produto.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Por favor, insira um ID válido do produto.");
+    }
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
