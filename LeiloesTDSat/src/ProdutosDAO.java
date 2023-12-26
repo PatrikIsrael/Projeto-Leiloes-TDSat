@@ -76,7 +76,7 @@ public class ProdutosDAO {
     
         public ArrayList<ProdutosDTO> listarProdutosVendidos() {
         ArrayList<ProdutosDTO> produtosVendidos = new ArrayList<>();
-        String query = "SELECT * FROM produtos WHERE status = 'vendido'";
+        String query = "SELECT * FROM produtos WHERE status = 'Vendido'";
         Connection conexao = ConexaoBancoDados.obterConexao();
 
         try (PreparedStatement prepStatement = conexao.prepareStatement(query);
